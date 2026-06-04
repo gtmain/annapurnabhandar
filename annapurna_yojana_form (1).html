@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Annapurna Yojana — Family Data Collection Form</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #e8660a;
+    --saffron-light: #fdf3ea;
+    --saffron-mid: #f5a05a;
+    --green: #1a6b3c;
+    --green-light: #eaf4ee;
+    --navy: #1a2744;
+    --cream: #fdf8f2;
+    --border: #d9c9b0;
+    --text: #2c2215;
+    --muted: #7a6a55;
+    --white: #ffffff;
+    --section-gap: 2.5rem;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--navy) 0%, #243560 100%);
+    color: white;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--saffron) 33%, white 33%, white 66%, var(--green) 66%);
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .emblem {
+    width: 72px; height: 72px;
+    background: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  .header-text h1 {
+    font-family: 'Noto Serif', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  .header-text p {
+    font-size: 0.85rem;
+    opacity: 0.75;
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .header-notice {
+    background: var(--saffron);
+    color: white;
+    font-size: 0.78rem;
+    text-align: center;
+    padding: 0.5rem 2rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+  .progress-steps {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .progress-steps::-webkit-scrollbar { display: none; }
+  .step-pill {
+    flex: 1;
+    min-width: 90px;
+    padding: 0.7rem 0.5rem;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .step-pill.active { color: var(--saffron); border-bottom-color: var(--saffron); }
+  .step-pill.done { color: var(--green); border-bottom-color: var(--green); }
+
+  /* FORM WRAPPER */
+  .form-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* SECTIONS */
+  .section {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--saffron);
+  }
+  .section-icon {
+    width: 42px; height: 42px;
+    background: var(--saffron);
+    color: white;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-family: 'Noto Serif', serif;
+    font-size: 1.25rem;
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .section-title p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .card-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--saffron);
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  .span-2 { grid-column: span 2; }
+  .span-3 { grid-column: span 3; }
+
+  /* FIELDS */
+  .field { display: flex; flex-direction: column; gap: 0.35rem; }
+  label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.02em;
+  }
+  label .req { color: var(--saffron); margin-left: 2px; }
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="email"],
+  select, textarea {
+    width: 100%;
+    padding: 0.55rem 0.8rem;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: #fdfaf6;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--saffron);
+    box-shadow: 0 0 0 3px rgba(232, 102, 10, 0.12);
+    background: white;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a55' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.8rem center; padding-right: 2rem; }
+
+  /* RADIO / CHECKBOX */
+  .options-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+  .opt-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+    padding: 0.4rem 0.7rem;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    transition: all 0.15s;
+    user-select: none;
+    background: #fdfaf6;
+  }
+  .opt-label:hover { border-color: var(--saffron); background: var(--saffron-light); }
+  .opt-label input[type="radio"],
+  .opt-label input[type="checkbox"] {
+    width: auto; padding: 0;
+    accent-color: var(--saffron);
+  }
+  .opt-label:has(input:checked) {
+    border-color: var(--saffron);
+    background: var(--saffron-light);
+    color: var(--saffron);
+    font-weight: 600;
+  }
+
+  /* MEMBER TABS */
+  .member-tabs {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+  }
+  .mtab {
+    padding: 0.4rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    background: white;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .mtab.active { background: var(--navy); color: white; border-color: var(--navy); }
+  .mtab:hover:not(.active) { border-color: var(--navy); color: var(--navy); }
+
+  .member-panel { display: none; }
+  .member-panel.active { display: block; }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 1.2rem 0;
+  }
+
+  /* NOTICE */
+  .notice {
+    background: var(--green-light);
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.8rem;
+    color: var(--green);
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+  }
+
+  /* NAV BUTTONS */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1rem;
+  }
+  .btn {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+    font-family: 'Noto Sans', sans-serif;
+  }
+  .btn-outline {
+    background: white;
+    border: 2px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-primary {
+    background: var(--saffron);
+    color: white;
+  }
+  .btn-primary:hover { background: #c5560a; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(232,102,10,0.3); }
+  .btn-success {
+    background: var(--green);
+    color: white;
+  }
+  .btn-success:hover { background: #145530; }
+
+  /* DECLARATION */
+  .declaration-box {
+    background: #fffdf7;
+    border: 2px solid var(--saffron-mid);
+    border-radius: 10px;
+    padding: 1.5rem;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .sign-area {
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .sign-box {
+    border-bottom: 2px solid var(--text);
+    width: 220px;
+    height: 60px;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 0.3rem;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* SUCCESS */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  .success-screen .big-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+  .success-screen h2 {
+    font-family: 'Noto Serif', serif;
+    font-size: 1.8rem;
+    color: var(--green);
+    margin-bottom: 0.7rem;
+  }
+  .success-screen p { color: var(--muted); font-size: 0.92rem; max-width: 460px; margin: 0 auto 2rem; line-height: 1.6; }
+
+  /* VALIDATION */
+  .field.error input,
+  .field.error select,
+  .field.error textarea {
+    border-color: #d93025;
+    background: #fff5f5;
+    box-shadow: 0 0 0 3px rgba(217,48,37,0.1);
+  }
+  .field.error .options-row {
+    outline: 2px solid #d93025;
+    outline-offset: 4px;
+    border-radius: 6px;
+    padding: 4px;
+  }
+  .error-msg {
+    font-size: 0.72rem;
+    color: #d93025;
+    font-weight: 600;
+    margin-top: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .error-banner {
+    background: #fff0ef;
+    border: 1.5px solid #d93025;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.2rem;
+    display: none;
+  }
+  .error-banner .eb-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #d93025;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .error-banner ul {
+    padding-left: 1.2rem;
+    font-size: 0.78rem;
+    color: #8b1a14;
+    line-height: 1.7;
+  }
+  .error-banner ul li { cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+  .error-banner ul li:hover { color: #d93025; }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .span-2, .span-3 { grid-column: span 1; }
+    .header-inner { padding: 1.5rem 1rem 1rem; }
+    .header-text h1 { font-size: 1.2rem; }
+    .form-wrap { padding: 1.2rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="emblem">🌾</div>
+    <div class="header-text">
+      <h1>Annapurna Yojana</h1>
+      <p>Government of West Bengal &nbsp;·&nbsp; Family Level Data Collection Form</p>
+    </div>
+  </div>
+  <div class="header-notice">⚠ Filling up of all fields is mandatory &nbsp;|&nbsp; All information is subject to verification</div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-steps" id="progressSteps">
+    <div class="step-pill active" onclick="goTo(0)">A. Identity</div>
+    <div class="step-pill" onclick="goTo(1)">B. Ration Card</div>
+    <div class="step-pill" onclick="goTo(2)">C. Assets</div>
+    <div class="step-pill" onclick="goTo(3)">D. Income</div>
+    <div class="step-pill" onclick="goTo(4)">E. Documents</div>
+    <div class="step-pill" onclick="goTo(5)">F. Social</div>
+    <div class="step-pill" onclick="goTo(6)">G. Benefits</div>
+    <div class="step-pill" onclick="goTo(7)">H. Declaration</div>
+  </div>
+</div>
+
+<div class="form-wrap">
+<form id="mainForm" novalidate>
+
+<!-- ===================== SECTION A ===================== -->
+<div class="section active" id="sec0">
+  <div class="section-header">
+    <div class="section-icon">👤</div>
+    <div class="section-title">
+      <h2>Section A — Family Identity</h2>
+      <p>Basic details of the Head of Family and all members</p>
+    </div>
+  </div>
+
+  <div class="error-banner" id="sec0ErrorBanner">
+    <div class="eb-title">⚠ Please fill in all required fields before continuing</div>
+    <ul id="sec0ErrorList"></ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Head of Family (HOF)</div>
+    <div class="grid-2">
+      <div class="field span-2" id="fld-hofName">
+        <label>1. Full Name of Head of Family (HOF) <span class="req">*</span></label>
+        <input type="text" id="hofName" placeholder="As per Aadhaar or official ID">
+      </div>
+      <div class="field" id="fld-hofDob">
+        <label>2. Date of Birth (HOF) <span class="req">*</span></label>
+        <input type="date" id="hofDob">
+      </div>
+      <div class="field" id="fld-hofGender">
+        <label>3. Gender (HOF) <span class="req">*</span></label>
+        <div class="options-row">
+          <label class="opt-label"><input type="radio" name="hofGender" value="M"> Male</label>
+          <label class="opt-label"><input type="radio" name="hofGender" value="F"> Female</label>
+          <label class="opt-label"><input type="radio" name="hofGender" value="O"> Other</label>
+        </div>
+      </div>
+      <div class="field" id="fld-hofAadhaar">
+        <label>4. Aadhaar No. (HOF) <span class="req">*</span></label>
+        <input type="text" id="hofAadhaar" placeholder="12-digit Aadhaar number" maxlength="14">
+      </div>
+      <div class="field">
+        <label>5. Household ID of Digital Ration Card</label>
+        <input type="text" placeholder="If available">
+      </div>
+      <div class="field" id="fld-hofMembers">
+        <label>6. Total Number of Family Members <span class="req">*</span></label>
+        <input type="number" id="hofMembers" min="1" max="20" placeholder="Number only">
+      </div>
+      <div class="field span-2" id="fld-hofAddress">
+        <label>7. Permanent Address <span class="req">*</span></label>
+        <textarea id="hofAddress" placeholder="Full address including village/town, GP/ward, block/municipality, district, PIN"></textarea>
+      </div>
+      <div class="field" id="fld-hofContact">
+        <label>8. Contact Number <span class="req">*</span></label>
+        <input type="tel" id="hofContact" placeholder="Preferably Aadhaar-linked mobile">
+      </div>
+      <div class="field" id="fld-hofCategory">
+        <label>12. Category <span class="req">*</span></label>
+        <select id="hofCategory">
+          <option value="">— Select Category —</option>
+          <option>UR (General)</option>
+          <option>UR-EWS</option>
+          <option>SC</option>
+          <option>ST</option>
+          <option>OBC</option>
+          <option>PVTG</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">9. Family Members' Details (Members 1–5)</div>
+    <div class="notice">For children below 5 years of age, write <strong>NA</strong> where Aadhaar is not available. Check "Applying for Annapurna Yojana" for applicable members.</div>
+
+    <div class="member-tabs" id="memberTabs">
+      <div class="mtab active" onclick="switchMember(0)">Member 1</div>
+      <div class="mtab" onclick="switchMember(1)">Member 2</div>
+      <div class="mtab" onclick="switchMember(2)">Member 3</div>
+      <div class="mtab" onclick="switchMember(3)">Member 4</div>
+      <div class="mtab" onclick="switchMember(4)">Member 5</div>
+    </div>
+
+    <div id="memberPanels">
+      <!-- JS renders these -->
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">10. Bank Accounts (HOF & Adult Members)</div>
+    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;">Aadhaar-linked bank accounts for DBT credit</p>
+    <div id="bankFields"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">11. EPIC / Electoral Roll Details (HOF & Adult Members)</div>
+    <div id="epicFields"></div>
+  </div>
+
+  <div class="nav-row">
+    <div></div>
+    <button type="button" class="btn btn-primary" onclick="validateAndNext()">Next: Ration Card →</button>
+  </div>
+</div>
+
+<!-- ===================== SECTION B ===================== -->
+<div class="section" id="sec1">
+  <div class="section-header">
+    <div class="section-icon">🍚</div>
+    <div class="section-title">
+      <h2>Section B — Ration Card / Food Subsidy</h2>
+      <p>Current ration card status and monthly lifting</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>1. Do you have a Digital Ration Card? <span class="req">*</span></label>
+      <div class="options-row">
+        <label class="opt-label"><input type="radio" name="hasRation" value="yes" onchange="toggleRationType(true)"> Yes</label>
+        <label class="opt-label"><input type="radio" name="hasRation" value="no" onchange="toggleRationType(false)"> No</label>
+      </div>
+    </div>
+
+    <div id="rationTypeRow" style="display:none">
+      <div class="field" style="margin-bottom:1.2rem">
+        <label>2. Type of Ration Card <span class="req">*</span></label>
+        <div class="options-row">
+          <label class="opt-label"><input type="radio" name="cardType" value="AAY"> AAY</label>
+          <label class="opt-label"><input type="radio" name="cardType" value="PHH"> PHH</label>
+          <label class="opt-label"><input type="radio" name="cardType" value="SPHH"> SPHH</label>
+          <label class="opt-label"><input type="radio" name="cardType" value="RKSY1"> RKSY1</label>
+          <label class="opt-label"><input type="radio" name="cardType" value="RKSY2"> RKSY2</label>
+          <label class="opt-label"><input type="radio" name="cardType" value="Non-subsidized"> Non-subsidized</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>3. Whether family is lifting monthly ration from the Ration Shop? <span class="req">*</span></label>
+      <div class="options-row">
+        <label class="opt-label"><input type="radio" name="liftingRation" value="yes"> Yes</label>
+        <label class="opt-label"><input type="radio" name="liftingRation" value="no"> No</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-outline" onclick="prevSection()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextSection()">Next: Assets →</button>
+  </div>
+</div>
+
+<!-- ===================== SECTION C ===================== -->
+<div class="section" id="sec2">
+  <div class="section-header">
+    <div class="section-icon">🏠</div>
+    <div class="section-title">
+      <h2>Section C — Assets</h2>
+      <p>Housing, land, vehicles, and health insurance</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>1. Does your house have ≥3 pucca rooms? <span class="req">*</span></label>
+      <div class="options-row">
+        <label class="opt-label"><input type="radio" name="houseSize" value="yes"> Yes</label>
+        <label class="opt-label"><input type="radio" name="houseSize" value="no"> No</label>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>2. Does your family own any land? <span class="req">*</span></label>
+      <div class="options-row">
+        <label class="opt-label"><input type="radio" name="ownsLand" value="yes" onchange="toggleLandFields(true)"> Yes</label>
+        <label class="opt-label"><input type="radio" name="ownsLand" value="no" onchange="toggleLandFields(false)"> No</label>
+      </div>
+    </div>
+
+    <div id="landDetails" style="display:none">
+      <div class="field">
+        <label>3. Total landholding of all family members (in decimals) <span class="req">*</span></label>
+        <input type="number" placeholder="e.g. 50" step="0.01">
+        <span style="font-size:0.72rem;color:var(--muted)">Attach: Registration Records, Latest RoR Land records</span>
+      </div>
+      <hr class="divider">
+    </div>
+
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>4. Does any member own a motorized non-commercial 4-wheeler? <span class="req">*</span></label>
+      <div class="options-row">
+        <label class="opt-label"><input type="radio" name="owns4W" value="yes" onchange="toggleVehicleFields(true)"> Yes</label>
+        <label class="opt-label"><input type="radio" name="owns4W" value="no" onchange="toggleVehicleFields(false)"> No</label>
+      </div>
+    </div>
+
+    <div id="vehicleDetails" style="display:none">
+      <div class="grid-3">
+        <div class="field">
+          <label>Number of Vehicles</label>
+          <input type="number" min="1">
+        </div>
+        <div class="field">
+          <label>Vehicle Registration No.</label>
+          <input type="text" placeholder="e.g. WB 01 AB 1234">
+        </div>
+        <div class="field">
+          <label>Model</label>
+          <input type="text" placeholder="e.g. Maruti Swift">
+        </div>
+      </div>
+      <hr class="divider">
+    </div>
+
+    <div class="field">
+      <label>5. Health Insurance Coverage <span class="req">*</span></label>
+      <div class="options-row" style="margin-bottom:0.8rem">
+        <label class="opt-label"><input type="radio" name="healthIns" value="no" onchange="toggleInsFields(false)"> No coverage</label>
+        <label class="opt-label"><input type="radio" name="healthIns" value="yes" onchange="toggleInsFields(true)"> Yes (specify below)</label>
+      </div>
+      <div id="insDetails" style="display:none" id="insDetails">
+        <div id="insMemberFields"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-outline" onclick="prevSection()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextSection()">Next: Income →</button>
+  </div>
+</div>
+
+<!-- ===================== SECTION D ===================== -->
+<div class="section" id="sec3">
+  <div class="section-header">
+    <div class="section-icon">💼</div>
+    <div class="section-title">
+      <h2>Section D — Income / Profession</h2>
+      <p>Tax, PAN, employment, and education details</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>1. Does any member pay Income Tax or Professional Tax? <span class="req">*</span></label>
+      <div class="options-row">
+        <label class="opt-label"><input type="radio" name="paysTax" value="yes"> Yes</label>
+        <label class="opt-label"><input type="radio" name="paysTax" value="no"> No</label>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>2. PAN Card of family members</label>
+      <div id="panFields"></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>3. Nature of Employment (HOF & each member) <span class="req">*</span></label>
+      <div id="employmentFields"></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="grid-2" style="margin-bottom:1.2rem">
+      <div class="field">
+        <label>4. Number of Literate Adult Members <span class="req">*</span></label>
+        <input type="number" min="0" placeholder="Count">
+      </div>
+      <div class="field">
+        <label>Number of Illiterate Adult Members <span class="req">*</span></label>
+        <input type="number" min="0" placeholder="Count">
+      </div>
+    </div>
+    <div id="literacyFields"></div>
+
+    <hr class="divider">
+
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>5. Is any member a former/current constitutional post holder, minister, MP, MLA, ULB/Panchayat member? <span class="req">*</span></label>
+      <div class="options-row">
+        <label class="opt-label"><input type="radio" name="constPost" value="yes"> Yes</label>
+        <label class="opt-label"><input type="radio" name="constPost" value="no"> No</label>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>6. Is any member a Government Pensioner? <span class="req">*</span></label>
+      <div class="options-row">
+        <label class="opt-label"><input type="radio" name="govtPension" value="yes"> Yes</label>
+        <label class="opt-label"><input type="radio" name="govtPension" value="no"> No</label>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>7. Is any member registered under GST? <span class="req">*</span></label>
+      <div class="options-row">
+        <label class="opt-label"><input type="radio" name="gstReg" value="yes" onchange="document.getElementById('gstinRow').style.display='block'"> Yes</label>
+        <label class="opt-label"><input type="radio" name="gstReg" value="no" onchange="document.getElementById('gstinRow').style.display='none'"> No</label>
+      </div>
+      <div id="gstinRow" style="display:none;margin-top:0.6rem">
+        <input type="text" placeholder="GSTIN Number" maxlength="15">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>8. Total Annual Family Income (INR) <span class="req">*</span></label>
+      <input type="number" placeholder="Amount in rupees (digits only)">
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-outline" onclick="prevSection()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextSection()">Next: Documents →</button>
+  </div>
+</div>
+
+<!-- ===================== SECTION E ===================== -->
+<div class="section" id="sec4">
+  <div class="section-header">
+    <div class="section-icon">📄</div>
+    <div class="section-title">
+      <h2>Section E — Other Identity Documents</h2>
+      <p>CAA status, credit cards, SIR 2026 deletion details</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">1. CAA Application Status (Member-wise)</div>
+    <div id="caaFields"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">2. Other Identity Documents (KCC, MJCC, Student CC, Artisan Credit Card, etc.)</div>
+    <div id="otherDocFields"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3. If Deleted in SIR 2026 — Tribunal Case Pending?</div>
+    <div id="sirFields"></div>
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-outline" onclick="prevSection()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextSection()">Next: Social Status →</button>
+  </div>
+</div>
+
+<!-- ===================== SECTION F ===================== -->
+<div class="section" id="sec5">
+  <div class="section-header">
+    <div class="section-icon">👨‍👩‍👧</div>
+    <div class="section-title">
+      <h2>Section F — Social Status & Dependents</h2>
+      <p>Children's schooling and vaccination records</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">1. Children Attending School (up to 4 children)</div>
+    <div id="schoolChildren"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">2. Children's Vaccination Status</div>
+    <div id="vaccinationFields"></div>
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-outline" onclick="prevSection()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextSection()">Next: Benefits →</button>
+  </div>
+</div>
+
+<!-- ===================== SECTION G ===================== -->
+<div class="section" id="sec6">
+  <div class="section-header">
+    <div class="section-icon">🏛️</div>
+    <div class="section-title">
+      <h2>Section G — Benefits Under Government Schemes</h2>
+      <p>DBT benefits currently received by family members</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="notice">List all schemes being received through Direct Benefit Transfer (DBT) for each member.</div>
+    <div id="benefitFields"></div>
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-outline" onclick="prevSection()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextSection()">Next: Declaration →</button>
+  </div>
+</div>
+
+<!-- ===================== SECTION H ===================== -->
+<div class="section" id="sec7">
+  <div class="section-header">
+    <div class="section-icon">✅</div>
+    <div class="section-title">
+      <h2>Section H — Declaration & Consent</h2>
+      <p>Read carefully before signing</p>
+    </div>
+  </div>
+
+  <div class="declaration-box">
+    <strong>Declaration by Applicant:</strong><br><br>
+    I hereby declare that the above information is true to the best of my knowledge and I have provided all the supporting documents where applicable and <strong>HAVE NOT</strong> missed any criteria as mentioned above.<br><br>
+    I understand that my social protection benefits will be stopped if any information provided by me turns out to be false.<br><br>
+    <em><strong>Note:</strong> "Family" is defined as a group of persons who normally live together and take their meals from a common kitchen.</em>
+  </div>
+
+  <div class="card">
+    <div class="field" style="margin-bottom:1.5rem">
+      <label class="opt-label" style="font-size:0.9rem;padding:0.8rem 1.2rem;border-radius:8px">
+        <input type="checkbox" id="agreeCheck"> &nbsp; I agree to the above declaration and confirm that all information is correct
+      </label>
+    </div>
+
+    <div class="grid-2">
+      <div class="field">
+        <label>Date of Submission <span class="req">*</span></label>
+        <input type="date" id="submissionDate">
+      </div>
+      <div class="field">
+        <label>Place of Submission <span class="req">*</span></label>
+        <input type="text" placeholder="Village / Town">
+      </div>
+    </div>
+
+    <div class="sign-area">
+      <div>
+        <div class="sign-box">Signature / Thumb Impression</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:0.4rem;letter-spacing:0.04em">(Applicant / Head of Family)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-outline" onclick="prevSection()">← Back</button>
+    <button type="button" class="btn btn-success" onclick="submitForm()">Submit Application ✓</button>
+  </div>
+</div>
+
+</form>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="successScreen">
+  <div class="big-icon">🌾</div>
+  <h2>Application Submitted!</h2>
+  <p>Your Annapurna Yojana family data collection form has been submitted successfully. Please keep a copy of this form and your supporting documents for verification.</p>
+  <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save</button>
+</div>
+
+</div><!-- end form-wrap -->
+
+<script>
+let currentSection = 0;
+const totalSections = 8;
+const memberLabels = ['HOF', 'Member 1', 'Member 2', 'Member 3', 'Member 4', 'Member 5'];
+const memberKeys = ['hof', 'm1', 'm2', 'm3', 'm4', 'm5'];
+
+const employmentOptions = [
+  'Government Sector', 'Salaried – Private Sector', 'Formal Sector Self-Employed (Entrepreneur/Business/Proprietor)',
+  'Part-time Job', 'Informal Sector Self-Employed (Artisan/Craftsman/Farmer)', 'Migrant Labourer', 'Unemployed', 'Others'
+];
+
+const schoolTypes = ['Govt / Govt Aided / Sponsored School', 'Private School', 'Recognized Madrasah', 'Other Madrasah', 'Others'];
+
+// ---- Build Member Panels (Section A) ----
+function buildMemberPanels() {
+  const container = document.getElementById('memberPanels');
+  let html = '';
+  for (let i = 0; i < 5; i++) {
+    html += `<div class="member-panel${i===0?' active':''}" id="mpanel${i}">
+      <div class="grid-2">
+        <div class="field"><label>Name</label><input type="text" placeholder="Full Name"></div>
+        <div class="field"><label>Date of Birth</label><input type="date"></div>
+        <div class="field"><label>Gender</label>
+          <div class="options-row">
+            <label class="opt-label"><input type="radio" name="mg${i}" value="M"> Male</label>
+            <label class="opt-label"><input type="radio" name="mg${i}" value="F"> Female</label>
+            <label class="opt-label"><input type="radio" name="mg${i}" value="O"> Other</label>
+          </div>
+        </div>
+        <div class="field"><label>Relation with Head of Family</label>
+          <select><option value="">— Select —</option><option>Spouse</option><option>Son</option><option>Daughter</option><option>Father</option><option>Mother</option><option>Brother</option><option>Sister</option><option>Grandfather</option><option>Grandmother</option><option>Grandson</option><option>Granddaughter</option><option>Other</option></select>
+        </div>
+        <div class="field"><label>Aadhaar No.</label><input type="text" placeholder="12-digit / NA for children < 5 yrs" maxlength="14"></div>
+        <div class="field" style="align-self:end">
+          <label class="opt-label" style="border-radius:8px;padding:0.55rem 0.9rem">
+            <input type="checkbox"> &nbsp;Applying for Annapurna Yojana
+          </label>
+        </div>
+      </div>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+function switchMember(idx) {
+  document.querySelectorAll('.mtab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.member-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+}
+
+// ---- Bank Fields ----
+function buildBankFields() {
+  const container = document.getElementById('bankFields');
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div style="margin-bottom:1.2rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.05em">${lbl}</div>
+      <div class="grid-3">
+        <div class="field"><label>Bank Name</label><input type="text" placeholder="Bank Name"></div>
+        <div class="field"><label>Account Number</label><input type="text" placeholder="A/C No."></div>
+        <div class="field"><label>IFSC Code</label><input type="text" placeholder="IFSC" maxlength="11"></div>
+      </div>
+    </div>`;
+    if (i < memberLabels.length - 1) html += '<hr class="divider">';
+  });
+  container.innerHTML = html;
+}
+
+// ---- EPIC Fields ----
+function buildEpicFields() {
+  const container = document.getElementById('epicFields');
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div style="margin-bottom:1rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.05em">${lbl}</div>
+      <div class="grid-2">
+        <div class="field"><label>EPIC No.</label><input type="text" placeholder="Voter ID Card Number"></div>
+        <div class="field"><label>AC & Part No. of Electoral Roll</label><input type="text" placeholder="AC No. / Part No."></div>
+      </div>
+    </div>`;
+    if (i < memberLabels.length - 1) html += '<hr class="divider">';
+  });
+  container.innerHTML = html;
+}
+
+// ---- Insurance Member Fields ----
+function buildInsFields() {
+  const container = document.getElementById('insDetails');
+  if (!container) return;
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div style="margin-bottom:1rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">${lbl}</div>
+      <div class="grid-3">
+        <div class="field"><label>Type</label>
+          <div class="options-row">
+            <label class="opt-label"><input type="radio" name="insType${i}" value="Govt"> Govt</label>
+            <label class="opt-label"><input type="radio" name="insType${i}" value="Private"> Private</label>
+          </div>
+        </div>
+        <div class="field"><label>Premium (₹)</label><input type="number" placeholder="Annual premium"></div>
+        <div class="field"><label>Sum Assured (₹)</label><input type="number" placeholder="Sum assured"></div>
+      </div>
+    </div>`;
+    if (i < memberLabels.length - 1) html += '<hr class="divider">';
+  });
+  container.innerHTML = html;
+}
+
+// ---- PAN Fields ----
+function buildPanFields() {
+  const container = document.getElementById('panFields');
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div class="grid-2" style="margin-bottom:0.8rem">
+      <div class="field"><label>${lbl} — Name</label><input type="text" placeholder="Name as per PAN"></div>
+      <div class="field"><label>${lbl} — PAN No.</label><input type="text" placeholder="ABCDE1234F" maxlength="10"></div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+// ---- Employment Fields ----
+function buildEmploymentFields() {
+  const container = document.getElementById('employmentFields');
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div style="margin-bottom:1.2rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">${lbl}</div>
+      <div class="options-row">`;
+    employmentOptions.forEach(opt => {
+      html += `<label class="opt-label"><input type="checkbox" name="emp${i}"> ${opt}</label>`;
+    });
+    html += `</div></div>`;
+    if (i < memberLabels.length - 1) html += '<hr class="divider">';
+  });
+  container.innerHTML = html;
+}
+
+// ---- Literacy Fields ----
+function buildLiteracyFields() {
+  const container = document.getElementById('literacyFields');
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div style="margin-bottom:1rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">${lbl}</div>
+      <div class="grid-2">
+        <div class="field"><label>Literacy</label>
+          <div class="options-row">
+            <label class="opt-label"><input type="radio" name="lit${i}" value="L"> Literate</label>
+            <label class="opt-label"><input type="radio" name="lit${i}" value="I"> Illiterate</label>
+          </div>
+        </div>
+        <div class="field"><label>Highest Qualification (if literate)</label><input type="text" placeholder="e.g. Class X, Graduate, etc."></div>
+      </div>
+    </div>`;
+    if (i < memberLabels.length - 1) html += '<hr class="divider">';
+  });
+  container.innerHTML = html;
+}
+
+// ---- CAA Fields ----
+function buildCaaFields() {
+  const container = document.getElementById('caaFields');
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div style="margin-bottom:1.2rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">${lbl}</div>
+      <div class="options-row" style="margin-bottom:0.5rem">
+        <label class="opt-label"><input type="radio" name="caa${i}" value="NA"> Not Applicable</label>
+        <label class="opt-label"><input type="radio" name="caa${i}" value="applied"> Applied</label>
+        <label class="opt-label"><input type="radio" name="caa${i}" value="issued"> Issued</label>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Application No. (if applied)</label><input type="text" placeholder="Application number"></div>
+        <div class="field"><label>Certificate No. (if issued)</label><input type="text" placeholder="Certificate number"></div>
+      </div>
+    </div>`;
+    if (i < memberLabels.length - 1) html += '<hr class="divider">';
+  });
+  container.innerHTML = html;
+}
+
+// ---- Other Doc Fields ----
+function buildOtherDocFields() {
+  const container = document.getElementById('otherDocFields');
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div style="margin-bottom:1rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">${lbl}</div>
+      <div class="grid-3">
+        <div class="field"><label>Document Type / Name</label><input type="text" placeholder="e.g. KCC, MJCC, Student CC"></div>
+        <div class="field"><label>ID Number</label><input type="text" placeholder="Document ID"></div>
+        <div class="field"><label>Date of Issue</label><input type="date"></div>
+      </div>
+    </div>`;
+    if (i < memberLabels.length - 1) html += '<hr class="divider">';
+  });
+  container.innerHTML = html;
+}
+
+// ---- SIR Fields ----
+function buildSirFields() {
+  const container = document.getElementById('sirFields');
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div style="margin-bottom:1rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">${lbl}</div>
+      <div class="options-row" style="margin-bottom:0.5rem">
+        <label class="opt-label"><input type="radio" name="sir${i}" value="NA"> Not Applicable</label>
+        <label class="opt-label"><input type="radio" name="sir${i}" value="no"> No</label>
+        <label class="opt-label"><input type="radio" name="sir${i}" value="yes"> Yes (case pending)</label>
+      </div>
+      <div class="field"><label>Case Details (if yes)</label><input type="text" placeholder="Tribunal case details"></div>
+    </div>`;
+    if (i < memberLabels.length - 1) html += '<hr class="divider">';
+  });
+  container.innerHTML = html;
+}
+
+// ---- School Children ----
+function buildSchoolChildren() {
+  const container = document.getElementById('schoolChildren');
+  let html = '';
+  for (let i = 1; i <= 4; i++) {
+    html += `<div style="margin-bottom:1.5rem">
+      <div class="card-title" style="margin-top:${i>1?'1rem':0}">Child ${i}</div>
+      <div class="grid-2">
+        <div class="field"><label>Member No.</label><input type="text" placeholder="Member number in family"></div>
+        <div class="field"><label>Name of Child</label><input type="text" placeholder="Full name"></div>
+        <div class="field"><label>Grade / Class</label><input type="text" placeholder="e.g. Class VII"></div>
+        <div class="field"><label>School Name</label><input type="text" placeholder="Name of school/institution"></div>
+        <div class="field span-2"><label>School Type</label>
+          <div class="options-row">
+            ${schoolTypes.map(t => `<label class="opt-label"><input type="radio" name="stype${i}"> ${t}</label>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+    if (i < 4) html += '<hr class="divider">';
+  }
+  container.innerHTML = html;
+}
+
+// ---- Vaccination ----
+function buildVaccinationFields() {
+  const container = document.getElementById('vaccinationFields');
+  let html = '';
+  for (let i = 1; i <= 4; i++) {
+    html += `<div style="margin-bottom:1rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">Child ${i}</div>
+      <div class="grid-2">
+        <div class="field"><label>Vaccination Status</label>
+          <div class="options-row">
+            <label class="opt-label"><input type="radio" name="vac${i}" value="yes"> Started / Completed</label>
+            <label class="opt-label"><input type="radio" name="vac${i}" value="no"> Not Vaccinated</label>
+          </div>
+        </div>
+        <div class="field"><label>Vaccination Card ID / Last date / Reason for skip</label><input type="text" placeholder="Card ID or details"></div>
+      </div>
+    </div>`;
+    if (i < 4) html += '<hr class="divider">';
+  }
+  container.innerHTML = html;
+}
+
+// ---- Benefits ----
+function buildBenefitFields() {
+  const container = document.getElementById('benefitFields');
+  let html = '';
+  memberLabels.forEach((lbl, i) => {
+    html += `<div style="margin-bottom:1.2rem">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem">${lbl}</div>
+      <div class="options-row" style="margin-bottom:0.6rem">
+        <label class="opt-label"><input type="radio" name="dbt${i}" value="yes"> Yes</label>
+        <label class="opt-label"><input type="radio" name="dbt${i}" value="no"> No</label>
+      </div>
+      <div class="grid-2">`;
+    for (let j = 1; j <= 5; j++) {
+      html += `<div class="field"><label>Scheme ${j}</label><input type="text" placeholder="Scheme name"></div>`;
+    }
+    html += `</div></div>`;
+    if (i < memberLabels.length - 1) html += '<hr class="divider">';
+  });
+  container.innerHTML = html;
+}
+
+// ---- Section A Validation ----
+function clearErrors() {
+  document.querySelectorAll('.field.error').forEach(f => {
+    f.classList.remove('error');
+    const msg = f.querySelector('.error-msg');
+    if (msg) msg.remove();
+  });
+}
+
+function markError(fieldId, message) {
+  const field = document.getElementById(fieldId);
+  if (!field) return;
+  field.classList.add('error');
+  if (!field.querySelector('.error-msg')) {
+    const msg = document.createElement('span');
+    msg.className = 'error-msg';
+    msg.innerHTML = '✖ ' + message;
+    field.appendChild(msg);
+  }
+}
+
+function scrollToField(fieldId) {
+  const el = document.getElementById(fieldId);
+  if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); const inp = el.querySelector('input,select,textarea'); if (inp) inp.focus(); }
+}
+
+function validateAndNext() {
+  clearErrors();
+  const errors = [];
+
+  // 1. Full Name
+  const hofName = document.getElementById('hofName');
+  if (!hofName.value.trim()) {
+    markError('fld-hofName', 'Full name of Head of Family is required');
+    errors.push({ label: 'Full Name of Head of Family', id: 'fld-hofName' });
+  }
+
+  // 2. Date of Birth
+  const hofDob = document.getElementById('hofDob');
+  if (!hofDob.value) {
+    markError('fld-hofDob', 'Date of Birth is required');
+    errors.push({ label: 'Date of Birth (HOF)', id: 'fld-hofDob' });
+  }
+
+  // 3. Gender (radio)
+  const genderPicked = document.querySelector('input[name="hofGender"]:checked');
+  if (!genderPicked) {
+    markError('fld-hofGender', 'Please select a gender');
+    errors.push({ label: 'Gender of Head of Family', id: 'fld-hofGender' });
+  }
+
+  // 4. Aadhaar
+  const hofAadhaar = document.getElementById('hofAadhaar');
+  const aadhaarVal = hofAadhaar.value.replace(/\s/g, '');
+  if (!aadhaarVal) {
+    markError('fld-hofAadhaar', 'Aadhaar number is required');
+    errors.push({ label: 'Aadhaar No. (HOF)', id: 'fld-hofAadhaar' });
+  } else if (!/^\d{12}$/.test(aadhaarVal)) {
+    markError('fld-hofAadhaar', 'Aadhaar must be exactly 12 digits');
+    errors.push({ label: 'Aadhaar No. — must be 12 digits', id: 'fld-hofAadhaar' });
+  }
+
+  // 6. Number of members
+  const hofMembers = document.getElementById('hofMembers');
+  if (!hofMembers.value || parseInt(hofMembers.value) < 1) {
+    markError('fld-hofMembers', 'Please enter the number of family members');
+    errors.push({ label: 'No. of Family Members', id: 'fld-hofMembers' });
+  }
+
+  // 7. Address
+  const hofAddress = document.getElementById('hofAddress');
+  if (!hofAddress.value.trim()) {
+    markError('fld-hofAddress', 'Permanent address is required');
+    errors.push({ label: 'Permanent Address', id: 'fld-hofAddress' });
+  }
+
+  // 8. Contact
+  const hofContact = document.getElementById('hofContact');
+  const contactVal = hofContact.value.replace(/\s/g, '');
+  if (!contactVal) {
+    markError('fld-hofContact', 'Contact number is required');
+    errors.push({ label: 'Contact Number', id: 'fld-hofContact' });
+  } else if (!/^\d{10}$/.test(contactVal)) {
+    markError('fld-hofContact', 'Please enter a valid 10-digit mobile number');
+    errors.push({ label: 'Contact Number — must be 10 digits', id: 'fld-hofContact' });
+  }
+
+  // 12. Category
+  const hofCategory = document.getElementById('hofCategory');
+  if (!hofCategory.value) {
+    markError('fld-hofCategory', 'Please select a category');
+    errors.push({ label: 'Category', id: 'fld-hofCategory' });
+  }
+
+  // Show/hide banner
+  const banner = document.getElementById('sec0ErrorBanner');
+  const list = document.getElementById('sec0ErrorList');
+  if (errors.length > 0) {
+    list.innerHTML = errors.map(e => `<li onclick="scrollToField('${e.id}')">${e.label}</li>`).join('');
+    banner.style.display = 'block';
+    banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
+  banner.style.display = 'none';
+  nextSection();
+}
+
+// ---- Navigation ----
+function updateProgress() {
+  const steps = document.querySelectorAll('.step-pill');
+  steps.forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i < currentSection) s.classList.add('done');
+    if (i === currentSection) s.classList.add('active');
+  });
+}
+
+function goTo(idx) {
+  document.getElementById('sec' + currentSection).classList.remove('active');
+  currentSection = idx;
+  document.getElementById('sec' + currentSection).classList.add('active');
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextSection() {
+  if (currentSection < totalSections - 1) goTo(currentSection + 1);
+}
+function prevSection() {
+  if (currentSection > 0) goTo(currentSection - 1);
+}
+
+// ---- Toggle helpers ----
+function toggleRationType(show) {
+  document.getElementById('rationTypeRow').style.display = show ? 'block' : 'none';
+}
+function toggleLandFields(show) {
+  document.getElementById('landDetails').style.display = show ? 'block' : 'none';
+}
+function toggleVehicleFields(show) {
+  document.getElementById('vehicleDetails').style.display = show ? 'block' : 'none';
+}
+function toggleInsFields(show) {
+  document.getElementById('insDetails').style.display = show ? 'block' : 'none';
+}
+
+// ---- Submit ----
+function submitForm() {
+  const agreed = document.getElementById('agreeCheck').checked;
+  if (!agreed) {
+    alert('Please agree to the declaration before submitting.');
+    return;
+  }
+  document.getElementById('mainForm').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ---- Set today's date ----
+document.getElementById('submissionDate').valueAsDate = new Date();
+
+// ---- Live clear errors on input ----
+['hofName','hofDob','hofAadhaar','hofMembers','hofAddress','hofContact','hofCategory'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', () => {
+    const field = el.closest('.field');
+    if (field) { field.classList.remove('error'); const msg = field.querySelector('.error-msg'); if (msg) msg.remove(); }
+  });
+  el.addEventListener('change', () => {
+    const field = el.closest('.field');
+    if (field) { field.classList.remove('error'); const msg = field.querySelector('.error-msg'); if (msg) msg.remove(); }
+  });
+});
+document.querySelectorAll('input[name="hofGender"]').forEach(r => {
+  r.addEventListener('change', () => {
+    const field = document.getElementById('fld-hofGender');
+    if (field) { field.classList.remove('error'); const msg = field.querySelector('.error-msg'); if (msg) msg.remove(); }
+  });
+});
+buildMemberPanels();
+buildBankFields();
+buildEpicFields();
+buildInsFields();
+buildPanFields();
+buildEmploymentFields();
+buildLiteracyFields();
+buildCaaFields();
+buildOtherDocFields();
+buildSirFields();
+buildSchoolChildren();
+buildVaccinationFields();
+buildBenefitFields();
+</script>
+</body>
+</html>
